@@ -68,8 +68,9 @@ function Home() {
                 'button button--outline button--secondary button--lg',
                 styles.getStarted,
               )}
+              id="ayo-belajar"
               to={useBaseUrl('blog')}>
-              Get Started
+              Ayo Belajar
             </Link>
           </div>
         </div>

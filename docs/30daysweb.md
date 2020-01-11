@@ -1436,15 +1436,31 @@ Jelasnya perhatikan gambar berikut.
 
 Sampai sejauh ini kita sudah belajar dan berhasil membuat webserver.
 
+## Hari 9
+Coming soon, request dan response
 <!-- ## Hari 9
 Update: Senin, 13 Januari 2020
 
 ### Install Insomnia REST
-Insomnia rest berguna untuk membantu kita melihat hasil atau response dari web server yang akan dibuat.
+Insomnia rest berguna untuk menguji api atau membantu kita melihat hasil atau response dari web server yang akan dibuat sesuai endpoint.
 
-![insomnia rest]()
+![insomnia rest](https://raw.githubusercontent.com/AsrulLove/img-db/master/insomnia-rest.png)
+
+Insomnia REST aja ing insomnia, kita mah... mungkin juga kali yah karena harus nulis series ini hehehe...
 
 ### Mengenal HTTP Method
+HTTP method adalah method-method yang disediakan server sebagai sarana untuk melakukan request terhadap server.
+
+Berikut adalah HTTP Method: 
+
+Method | Penggunaan Express | Keterangan
+:------:|--------|--------------
+GET | app.get() | Method GET biasanya digunakan hanya mengambil data.
+POST | app.post() | Method POST digunakan untuk mengirimkan entitas ke server yang ditentukan, sering menyebabkan perubahan pada keadaan atau efek samping pada server.
+PUT | app.put() | Method PUT menggantikan data yang ada dengan data yang dikirimkan.
+DELETE | app.delete() | Method DELETE untuk menghapus data yang ada.
+
+Penjelasan HTTP method bisa dibaca di [sini](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
 
 ### Request
 
