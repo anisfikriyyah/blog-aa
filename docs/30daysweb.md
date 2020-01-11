@@ -1436,8 +1436,6 @@ Jelasnya perhatikan gambar berikut.
 
 Sampai sejauh ini kita sudah belajar dan berhasil membuat webserver.
 
-## Hari 9
-Coming soon, request dan response
 <!-- ## Hari 9
 Update: Senin, 13 Januari 2020
 
@@ -1462,6 +1460,268 @@ DELETE | app.delete() | Method DELETE untuk menghapus data yang ada.
 
 Penjelasan HTTP method bisa dibaca di [sini](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
 
-### Request
+![request dan response](https://raw.githubusercontent.com/AsrulLove/img-db/master/req-res.png)
 
-### Response -->
+### Request
+Berdasarkan gambar dapat kita lihat bahwasanya kita atau user melakukan request terhadap server dengan method http melalui url atau alamat server tersebut.
+
+HTTP method yang telah dijelaskan sebelumnya dipakai sebagai pengenal untuk mengirimkan permintaan terhadap server. Perhatikan contoh berikut.
+
+File `index.js`
+
+```js
+const express = require('express')
+const app = express()
+
+app.get('/', function(request, response) {
+    response.send('Webserver asrul.dev')
+})
+
+app.get('/cari-jodoh', function(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+})
+
+app.post('/cari-jodoh', function(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+})
+
+app.put('/cari-jodoh', function(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+})
+
+app.delete('/cari-jodoh', function(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+})
+
+app.listen(5000, function() {
+    console.log(`Server running on http://localhost:5000`)
+})
+
+module.exports = app
+```
+
+Berikut hasil ketika diujicoba menggunakan Insomnia Rest.
+
+![Uji API](https://raw.githubusercontent.com/AsrulLove/img-db/master/request.png)
+
+Express telah menyediakan `function` atau `method` yang bertindak sebagai request, berikut beberapa daftar request yang disediakan oleh express:
+
+Properti | Deskripsi
+---------|----------
+.app | Referensi object pada express
+.cookies | Berisi informasi cookie yang dikirim, ini dapat digunakan jika menggunakan middleware `cookie-parser`
+.hostname | Informasi hosname web server
+.ip | Informasi IP server
+.method | HTTP Methode yang digunakan
+.params | Menampilkan informasi sesuai dengan nama parameter
+.path | Nemampilkan informasi jalur URL
+.protocol | Menampilkan protocol request
+.query | Objek yang berisi informasi query dari request yang berlangsung
+.secure | true jika request merupakan reques yang secure (digunakan pada HTTPS)
+.signedCookies | Berisi signed cookies oleh request, dapat digunakan jika menggunakan middleware `cokie-parser`
+.xhr | Bernilai true jika request adalah XMLHttpRequest
+.body | Berisi data yang dituliskan pada body request
+.header | Berisi data yang dituliskan pada header request
+.baseUrl | Informasi pengalamatan utama web server
+.originalUrl | Informasi pengalamatan request dilakukan
+
+Contoh penggunaan `.query`
+
+```
+?nama=Asrul&umur=25
+```
+
+Tulis berikut pada code
+
+```js
+app.get('/about', (req, res) => {
+    res.send('ini rute /about ' + req.query.nama + ' dan umurnya ' + req.query.umur)
+})
+```
+
+Penulisan query pada request diawali dengan tanda `?` setelah endpoint, dan jika ada beberapa query dipisahkan dengan tanda `&`. Query memiliki key dan value, key sebelah kiri dari tanda `=` dan value berada pada sebelah kanan tanda `=`. Perhatikan gambar berikut.
+
+![penulisan query](https://raw.githubusercontent.com/AsrulLove/img-db/master/penulisan-query.png)
+
+### Response
+Kabalikan dari request, response adalah proses layanan yang diberikan server pada client yang melakukan request. Sama halnya dengan request, `function` atau `method` response sangat banyak yang disedikan oleh express.
+
+Properti | Deskripsi
+------|--------
+.send() | Mengirim dan menampilkan data string ke user
+.end() | Mengakhiri response server
+.status() | Informasi HTTP status, seperti 200, 404, dll
+.json() | Menjadikan response sebagai data JSON
+.render() | Merender file sebagai HTML
+.download() | Memberikan response sebagai file yang dapat diunduh
+.type() | Menyetting tipe response server
+.redirect() | Mengalihkan halaman ke halaman yang lain
+
+contoh penggunaan `.redirect()`
+
+```js
+app.get('/profile', (req, res) => {
+    res.redirect('/login')
+})
+
+app.get('/login', (req, res) => {
+    res.send('silahkan Login terlebih dahulu')
+})
+```
+
+Hasilnya berikut
+
+![Video Redirect](https://raw.githubusercontent.com/talkasrul/step-2/master/week-1/assets/redirect-response.gif).
+
+Silahkan cobakan, jika ada kendala silahkan chat di group. -->
+
+## Hari 10
+Update: Selasa, 14 Januari 2020
+
+### Router
+Router adalah arah jalannya program, sehingga ketika ada request misal `/login` maka router akan mengarahkan server menjalankan controller melalui `/login` sehingga mendapatkan response.
+
+Sebelumnya kita telah menggunakannya pada file `index.js` tetapi **Bagaimana jika kita memiliki route yang sangat banyak misal 3000 route?**. Maka kita perlu organisir rute kita agar lebih rapi dan mudah untuk dimaintenance.
+
+Buatlah folder baru pada proyek kita dengan nama `routes` dan isinya file `router.js`. Pindahkan kode dari file `index.js` yang mengandung **rute** ke file `router.js` dan tambahkan kode untuk method `.Router()` sehingga seperti berikut.
+
+![Folder Proyek](https://raw.githubusercontent.com/AsrulLove/img-db/master/folder-proyek.png)
+
+File `router.js`
+```js
+const router = require('express').Router()
+
+router.get('/', function(request, response) {
+    response.send('Webserver asrul.dev')
+})
+
+router.get('/cari-jodoh', function(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+})
+
+router.post('/cari-jodoh', function(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+})
+
+router.put('/cari-jodoh', function(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+})
+
+router.delete('/cari-jodoh', function(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+})
+
+router.get('/about', (req, res) => {
+    res.send('ini rute /about ' + req.query.nama + ' dan umurnya ' + req.query.umur)
+})
+
+router.get('/profile', (req, res) => {
+    res.redirect('/login')
+})
+
+router.get('/login', (req, res) => {
+    res.send('silahkan Login terlebih dahulu')
+})
+
+module.exports = router
+```
+
+Modifikasi file `index.js` menjadi seperti berikut.
+```js
+const express = require('express')
+const app = express()
+const router = require('./routes/router.js')
+
+app.use('/', router)
+
+app.listen(5000, function() {
+    console.log(`Server running on http://localhost:5000`)
+})
+
+module.exports = app
+```
+
+Jika dilakukan ujicoba pada endpoint pada materi request dan response tidak ada perubahan, saya ucapkan selamat. :) Anda berhasil memisahkan file server dan router.
+
+> Untuk pengelompokan rute lebih spesifik lagi seperti 1 file `user.router.js` hanya mengelola rute user saja, bisa Anda lakukan dengan hal yang sama. Mungkin ini akan menjadi salah satu challenge minggu depan.
+
+### Controller
+Controller adalah proses melakukan kontrol atau logika dan komputasi pada sebuah aplikasi sebelum dikirimkan ke user sebagai response. Disini kontrol masih bergabung dengan router. Mari kita buat sebuah folder dengan nama `controller` dan buat sebuah file dengan nama `jodoh.controller.js` sehingga hasilnya seperti berikut.
+
+File `jodoh.controller.js`
+
+```js
+function getJodoh(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+}
+
+function setJodoh(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+}
+
+function updateJodoh(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+}
+
+function deleteJodoh(request, response) {
+    response.send('Cari jodoh dengan http ' + request.method)
+}
+
+module.exports = {
+    getJodoh,
+    setJodoh,
+    updateJodoh,
+    deleteJodoh,
+}
+```
+
+Modifikasi file `router.js` menjadi seperti berikut.
+
+```js
+const router = require('express').Router()
+const jodoh = require('../controller/jodoh.controller.js')
+
+router.get('/', function(request, response) {
+    response.send('Webserver asrul.dev')
+})
+
+router.get('/cari-jodoh', jodoh.getJodoh)
+
+router.post('/cari-jodoh', jodoh.setJodoh)
+
+router.put('/cari-jodoh', jodoh.updateJodoh)
+
+router.delete('/cari-jodoh', jodoh.deleteJodoh)
+
+router.get('/about', (req, res) => {
+    res.send('ini rute /about ' + req.query.nama + ' dan umurnya ' + req.query.umur)
+})
+
+router.get('/profile', (req, res) => {
+    res.redirect('/login')
+})
+
+router.get('/login', (req, res) => {
+    res.send('silahkan Login terlebih dahulu')
+})
+
+module.exports = router
+```
+
+Jika hasilnya tidak berubah, saya ucapkan sekali lagi selamat Anda berhasil. :)
+
+## Hari 11
+Update: Rabu, 15 Januari 2020
+Model dan Sequelize
+
+## Hari 12
+Update: Kamis, 16 Januari 2020
+CRUD
+
+## Hari 13
+Update: Jumat, 17 Januari 2020
+AUTHENTICATE
+
+## Hari 14
+Update: Sabtu, 18 Januari 2020
+CHALLANGE

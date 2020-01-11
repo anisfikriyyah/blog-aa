@@ -65,5 +65,3 @@ jika dijalankan akan menghasilkan seperti berikut ini
 
 ![Name Asrul](https://raw.githubusercontent.com/talkasrul/step-2/master/week-1/assets/name-asrul-age.png)
 
-Jika ada yang belum dimengeri, silahkan bertanya pada instruktur :smile:
-
