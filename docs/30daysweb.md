@@ -1115,9 +1115,9 @@ let b = 8
 Toko Jaya Baru yang sedang melakukan SALE ingin menghitung jumlah profit untuk setiap jenis barang yang terjual pada hari itu.
 
 Barang-barang SALE yang akan dihitung penjualannya:
- - Sepatu brand Stacattu seharga 1500000 dan stock barang yang tesedia 10
+ - Sepatu brand Sanji seharga 1500000 dan stock barang yang tesedia 10
  - Baju brand Zoro seharga 500000 dan stock barang yang tesedia 2
- - Sweater brand Uniklooh seharga 175000 dan stock barang yang tersedia 1
+ - Sweater brand Hinata seharga 175000 dan stock barang yang tersedia 1
 
 Function akan menerima array yang berisikan object pembeli (nama pembeli, barang yang ingin dibeli dan jumlah barang yang dibelinya). Jika stock barang kurang dari jumlah yang ingin dibeli oleh pembeli maka pembeli batal untuk membeli barang tersebut.
 
@@ -1295,16 +1295,49 @@ prosesMenyapa(sapa)
 
 Jelas terlihat bahwa pada function prosesMenyapa() mengirimkan function callback() sebagai parameter, dan inilah yang disebut dengan callback. Callback sering digunakan untuk data asyncronous sehingga data dapat ditunggu selesai baru lanjutkan program.
 
-## Hari 8
-coming soon, Persiapan masuk backend (Express Js)
 
-<!-- ## Hari 8
+## Hari 8
 Update: Minggu, 12 Januari 2020
+
+### Module
+Modul adalah cara untuk membagi-bagi kode menjadi beberapa file sehingga dapat dipakai ulang. Jika kita ibaratkan dengan penulis, penulis yang baik adalah penulis yang membagi-bagikab bukunya menjadi beberapa bab. Begitu juga dengan programmer yang membagi-bagi kodenya menjadi beberapa module.
+
+Perhatikan penggunaan module berikut pada file `index.js` dan file `sapa.js`.
+
+File `sapa.js`
+```js
+function halo(nama) {
+  return `Halo, ${nama}`
+}
+
+function hi() {
+  return "Hi, apa kabar?"
+}
+
+module.exports = {
+  halo, hi
+}
+```
+
+File `index.js`
+```js
+const sapa = require("./sapa.js")
+
+console.log(sapa.halo("Asrul Dev"))
+// hasil: Halo, Asrul Dev
+
+console.log(sapa.hi())
+// hasil: Hi, apa kabar?
+```
+
+Perhatikan gambar berikut!
+
+![Module](https://raw.githubusercontent.com/AsrulLove/img-db/master/modulejs.png)
 
 Kita telah belajar dasar-dasar javascript, sekarang saatnya kita menggunakan pelajaran dasar tersebut untuk membangun sebuah aplikasi. Saat ini kita akan belajar backend yaitu menggunakan `express js`
 
 ### Menyiapkan Proyek
-Proyek yang akan kita buat harus diletakkan terpisah dengan file lain, sehingga dalam 1 folder tersebuh hanya ada proyek kita saja.
+Proyek yang akan kita buat harus diletakkan terpisah dengan file lain, sehingga dalam 1 folder tersebut hanya ada proyek kita saja.
 
 Pada pembelajaran series ini saya akan membuat folder proyek dengan nama **express-30-js**. Setelah folder dibuat arahkan terminal ke folder tersebut dengan cara:
 
@@ -1401,7 +1434,7 @@ Jelasnya perhatikan gambar berikut.
 
 ![Run server](https://raw.githubusercontent.com/AsrulLove/img-db/master/jalankanserver.png)
 
-Sampai sejauh ini kita sudah belajar dan berhasil membuat webserver. -->
+Sampai sejauh ini kita sudah belajar dan berhasil membuat webserver.
 
 <!-- ## Hari 9
 Update: Senin, 13 Januari 2020
