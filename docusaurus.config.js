@@ -4,6 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+const srul = require('./srul/index')
 
 module.exports = {
   title: 'Asrul Dev',
@@ -17,6 +18,9 @@ module.exports = {
     googleAnalytics: {
       trackingID: 'UA-154182296-1',
     },
+    customAsrul: {
+      kodeAsrul: 'asrulH',
+    },
     navbar: {
       title: 'Asrul Dev',
       logo: {
@@ -24,12 +28,12 @@ module.exports = {
         src: 'img/logo.svg',
       },
       links: [
-        {to: 'docs/30daysweb', label: '30d Js', position: 'right'},
+        {to: 'docs/30daysweb', label: '30 Hari Js', position: 'left'},
         {to: 'docs/android', label: 'Android', position: 'right'},
-        {to: 'blog', label: 'Blog', position: 'left'},
+        {to: 'blog', label: 'Blog', position: 'right'},
         // Please keep GitHub link to the right for consistency.
         {
-          href: 'https://github.com/talkasrul',
+          href: 'https://github.com/asruldev',
           label: 'GitHub',
           position: 'right',
         },
@@ -37,7 +41,7 @@ module.exports = {
       hideOnScroll: true,
     },
     footer: {
-      style: 'dark',
+      style: 'light',
       links: [
         {
           title: 'Series',
@@ -45,10 +49,6 @@ module.exports = {
             {
               label: '30 Hari Javascript',
               to: 'docs/30daysweb',
-            },
-            {
-              label: '1 Minggu Mongo',
-              to: 'docs/1wmongo',
             },
             {
               label: 'Android',
@@ -78,11 +78,11 @@ module.exports = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/talkasrul',
+              href: 'https://github.com/asruldev',
             },
             {
               label: 'Twitter',
-              href: 'https://twitter.com/talkasrul',
+              href: 'https://twitter.com/asruldev',
             },
           ],
         },
@@ -90,7 +90,7 @@ module.exports = {
       logo: {
         alt: 'Follow Me',
         src: 'https://sarasotasucculentsociety.org/images/social-media/instagram-name-graphic.svg',
-        href: 'https://instagram.com/talkasrul',
+        href: 'https://instagram.com/asrul.dev',
       },
       // Please do not remove the credits, help to publicize Docusaurus :)
       copyright: `Copyright © ${new Date().getFullYear()} Asrul Dev build with Love.`,
@@ -126,5 +126,6 @@ module.exports = {
       changefreq: 'weekly',
       priority: 0.5,
     },
+    srul,
   ],
 };

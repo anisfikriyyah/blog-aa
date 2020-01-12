@@ -8,16 +8,18 @@ import styles from './styles.module.css';
 
 const features = [
   {
-    title: <>Javascript</>,
+    title: <>30 Hari Javascript</>,
+    link: '/docs/30daysweb',
     imageUrl: 'https://skillvalue.com/jobs/wp-content/uploads/sites/7/2019/07/D%C3%A9veloppeur-Full-Stack-Poste-CDI-%E2%80%93-Paris.png',
     description: (
       <>
-        Javascript dengan materi dasar, express js, react, vue, angular, svelte, React Native dan Ionic
+        Series Javascript dengan materi dasar, express js, react js, dan React Native.
       </>
     ),
   },
   {
     title: <>Kotlin</>,
+    link: '/docs/master-kotlin',
     imageUrl: 'https://andrewshitov.com/wp-content/uploads/2019/11/Kotlin.png',
     description: (
       <>
@@ -27,6 +29,7 @@ const features = [
   },
   {
     title: <>PHP</>,
+    link: '/docs/paham-php',
     imageUrl: 'https://www.beliefmedia.com.au/wp-content/uploads/2017/09/php-wallpaper-1.jpg',
     description: (
       <>
@@ -36,16 +39,16 @@ const features = [
   },
 ];
 
-function Feature({imageUrl, title, description}) {
+function Feature({imageUrl, link, title, description}) {
   const imgUrl = useBaseUrl(imageUrl);
   return (
     <div className={classnames('col col--4', styles.feature)}>
       {imgUrl && (
-        <div className="text--center">
+        <a href={link} className="text--center">
           <img className={styles.featureImage} src={imgUrl} alt={title} />
-        </div>
+        </a>
       )}
-      <h3>{title}</h3>
+      <h3><a href={link}>{title}</a></h3>
       <p>{description}</p>
     </div>
   );

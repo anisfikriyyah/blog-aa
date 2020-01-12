@@ -1436,7 +1436,7 @@ Jelasnya perhatikan gambar berikut.
 
 Sampai sejauh ini kita sudah belajar dan berhasil membuat webserver.
 
-<!-- ## Hari 9
+## Hari 9
 Update: Senin, 13 Januari 2020
 
 ### Install Insomnia REST
@@ -1573,9 +1573,12 @@ Hasilnya berikut
 
 ![Video Redirect](https://raw.githubusercontent.com/talkasrul/step-2/master/week-1/assets/redirect-response.gif).
 
-Silahkan cobakan, jika ada kendala silahkan chat di group. -->
+Silahkan cobakan, jika ada kendala silahkan chat di group.
 
 ## Hari 10
+coming soon Router dan Controller
+
+<!-- ## Hari 10
 Update: Selasa, 14 Januari 2020
 
 ### Router
@@ -1708,9 +1711,9 @@ router.get('/login', (req, res) => {
 module.exports = router
 ```
 
-Jika hasilnya tidak berubah, saya ucapkan sekali lagi selamat Anda berhasil. :)
+Jika hasilnya tidak berubah, saya ucapkan sekali lagi selamat Anda berhasil. :) -->
 
-## Hari 11
+<!-- ## Hari 11
 Update: Rabu, 15 Januari 2020
 Model dan Sequelize
 
@@ -1724,4 +1727,4 @@ AUTHENTICATE
 
 ## Hari 14
 Update: Sabtu, 18 Januari 2020
-CHALLANGE
+CHALLANGE -->
