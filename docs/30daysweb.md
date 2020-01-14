@@ -1576,9 +1576,6 @@ Hasilnya berikut
 Silahkan cobakan, jika ada kendala silahkan chat di group.
 
 ## Hari 10
-coming soon Router dan Controller
-
-<!-- ## Hari 10
 Update: Selasa, 14 Januari 2020
 
 ### Router
@@ -1711,15 +1708,404 @@ router.get('/login', (req, res) => {
 module.exports = router
 ```
 
-Jika hasilnya tidak berubah, saya ucapkan sekali lagi selamat Anda berhasil. :) -->
+Jika hasilnya tidak berubah, saya ucapkan sekali lagi selamat Anda berhasil. :)
 
-<!-- ## Hari 11
+## Hari 11
 Update: Rabu, 15 Januari 2020
-Model dan Sequelize
 
-## Hari 12
+Sebelum kita masuk ke materi database, kita siapkan tools nya dulu yah, yang dibutuhkan selain yang sudah kita install sebelumnya adalah MySQL, biar gak ribet installnya baik di Linux, Windows, atau Mac saya sama ratakan saja memakai XAMPP.
+
+![xampp](https://raw.githubusercontent.com/AsrulLove/img-db/master/xampp.png)
+
+Bisa download [disini](https://www.apachefriends.org/index.html)
+
+Jika sudah download pastikan MySQL berjalan dengan baik sehingga kita bisa membuka database di http://localhost/phpmyadmin (mungkin sedikit berbeda dilaptop Anda, silahkan disesuaikan), seperti berikut.
+
+![php myadmin](https://raw.githubusercontent.com/AsrulLove/img-db/master/phpmyadmin.png)
+
+Sampai disitu, Anda sudah siap melanjutkan Express kembali.
+
+### Model dan Sequelize
+Pada 30 hari javascript kita akan membuat konsep MVC dimana kita akan pisahkan Model View dan Controller. Controller telah dibahas sebelumnya, dan saatnya sekarang kita bahas Model.
+
+Model yang kita gunakan memakai library dari sequelize. Sequelize adalah ORM untuk NodeJs.
+
+![ORM Squelize](https://miro.medium.com/max/1572/1*klzv0Ev8tTw7PafogculEQ.jpeg)
+
+### Install Sequelize Cli
+Tools command line atau cli yang dapat kita gunakan melalui terminal untuk menggenerate sequelize, maka Sequelize cli harus diinstall terlebih dahulu dengan cara.
+
+```bash
+npm i -g sequelize-cli
+```
+> Catatan: mungkin mac dan linux butuh `sudo`.
+
+### Install Sequelize
+
+Pada folder proyek `express-30-js` install sequelize dengan cara:
+
+```bash
+npm i sequelize
+```
+
+Sehingga `package.json` seperti berikut.
+
+```json
+{
+  "name": "express-30",
+  "version": "1.0.0",
+  "description": "belajar expres bersama asrul.dev",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Asrul harahap",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sequelize": "^5.21.3"
+  }
+}
+```
+
+### Initisalize Sequelize
+Agar proyek dikenali menggunakan sequelize, lakukan perintah berikut.
+
+```bash
+sequelize init
+```
+
+Perhatikan gambar berikut.
+
+![Sequelize init](https://raw.githubusercontent.com/AsrulLove/img-db/master/sequelize-init.png)
+
+Maka akan menghasilkan folder seeders, models, dan config.
+
+### Koneksi Database
+Database yang kita gunakan adalah MySQL, untuk menjalankan mysql, sequelize membutuhkan library tambahan yaitu `mysql2`. Install dengan cara.
+
+```bash
+npm i mysql2
+```
+
+Sehingga file `package.json` menjadi seperti berikut.
+
+```json
+{
+  "name": "express-30",
+  "version": "1.0.0",
+  "description": "belajar expres bersama asrul.dev",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Asrul harahap",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.3"
+  }
+}
+```
+
+Konfigurasi database dengan membuka file `config.json` dan sesuaikan dengan MySql Anda. Kira-kira seperti ini.
+
+```json
+{
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "db_30_hari",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  }
+}
+```
+
+Sesuai dengan file `config.json`, buat database dengan nama **db_30_hari**. Perhatikan gambar berikut.
+
+![New Database](https://raw.githubusercontent.com/AsrulLove/img-db/master/new-db.png)
+
+### Membuat Model
+
+Setelah database dibuat, kita pindah ke terminal untuk membuat Model, pada contoh ini nama model yang kita buat adalah **User**.
+
+```bash
+sequelize-cli model:generate --name User --attributes name:string,label:string,picture:string,email:string,phone:string,website:string,summary:string
+```
+
+Perhatigan gambar berikut
+
+![generate model](https://raw.githubusercontent.com/AsrulLove/img-db/master/model-user.png)
+
+Akan menghasilkan file dengan nama `user.js` pada folder model yang hasilnya seperti berikut.
+
+```js
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    name: DataTypes.STRING,
+    label: DataTypes.STRING,
+    picture: DataTypes.STRING,
+    email: DataTypes.STRING,
+    phone: DataTypes.STRING,
+    website: DataTypes.STRING,
+    summary: DataTypes.STRING
+  }, {});
+  User.associate = function(models) {
+    // associations can be defined here
+  };
+  return User;
+};
+```
+
+### Migrate Model
+Model yang telah dibuat, hanya sebtas file saja. Untuk mengubah file model ke tabel pada database maka lakukan migrate db dengan perintah berikut.
+
+```bash
+sequelize-cli db:migrate
+```
+
+Maka akan menghasilkan seperti berikut.
+
+![migrate db](https://raw.githubusercontent.com/AsrulLove/img-db/master/hasil-generate.png)
+
+Sekarang model dan tabel sudah selesai, kita siap untuk melakukan CRUD terhadap data tabel yang telah kita miliki.
+
+<!-- ## Hari 12
 Update: Kamis, 16 Januari 2020
-CRUD
+
+Karena kita sudah memiliki model dan tabel user. Sekarang saatnya kita melakukan operasi CRUD, Create, Read, Update dan Delete.
+
+Buatlah file route pada folder `routes` dengan nama **user.router.js** yang isinya seperti berikut.
+
+```js
+const router = require('express').Router()
+const userController = require('../controller/user.controller.js')
+
+router.post('/', userController.createUser)
+router.get('/', userController.readUser)
+router.put('/:id', userController.updateUser)
+router.delete('/:id', userController.deleteUser)
+
+module.exports = router
+```
+
+Buatlah file pada folder `controller` dengan nama **user.controller.js** yang isinya seperti berikut.
+```js
+const model = require('../models')
+
+function createUser(req, res) {
+}
+
+function readUser(req, res) {
+}
+
+function updateUser(req, res) {
+}
+
+function deleteUser(req, res) {
+}
+
+module.exports = {
+    createUser,
+    readUser,
+    updateUser,
+    deleteUser,
+}
+```
+
+Route yang akan kita buat adalah berikut.
+
+Route | Method| Keterangan
+------|-------|--------
+/users | POST | Menambahkan atau create user baru
+/users | GET | Mengambil data seluruh user
+/users/:id | PUT | Mengubah data user sesuai `id`
+/users/:id | DELETE | Menghapus data user sesuai `id`
+
+### Create
+Create yang berarti kita menambahkan data baru ke database. Untuk menambahkan data baru, silahkan modifikasi `function createUser` menjadi.
+
+```js
+function createUser(req, res) {
+    model.User.create({
+        name: req.body.name,
+        label: req.body.label,
+        picture: req.body.picture,
+        email: req.body.email,
+        phone: req.body.phone,
+        website: req.body.website,
+        summary: req.body.summary
+    })
+    .then( function(result) {
+        res.json(result)
+    })
+    .catch( function(error) {
+        res.json({error: error})
+    })
+}
+```
+
+`req.body` diambil dari data body sesuai dengan fieldnya yang dikirimkan oleh **insomnia** atau pada web nyata adalah dari form input. Ini akan berfungsi jika pada server kita beri middleware untuk menghandle nya.
+
+> Middleware lebih jelas akan kita bahas selanjutnya.
+
+Ubah file `index.js` sehingga menjadi seperti berikut.
+
+```js
+const express = require('express')
+const app = express()
+const router = require('./routes/router.js')
+
+app.use(express.urlencoded({extended: true}))
+app.use('/', router)
+
+app.listen(5000, function() {
+    console.log(`Server running on http://localhost:5000`)
+})
+
+module.exports = app
+```
+
+Dan hubungkan router user pada file `router.js`, sehingga file `router.js` menjadi seperti berikut.
+
+```js
+const router = require('express').Router()
+const jodoh = require('../controller/jodoh.controller.js')
+
+const user = require('./user.router.js')
+
+router.use('/users', user)
+
+router.get('/', function(request, response) {
+    response.send('Webserver asrul.dev')
+})
+
+router.get('/cari-jodoh', jodoh.getJodoh)
+
+router.post('/cari-jodoh', jodoh.setJodoh)
+
+router.put('/cari-jodoh', jodoh.updateJodoh)
+
+router.delete('/cari-jodoh', jodoh.deleteJodoh)
+
+router.get('/about', (req, res) => {
+    res.send('ini rute /about ' + req.query.nama + ' dan umurnya ' + req.query.umur)
+})
+
+router.get('/profile', (req, res) => {
+    res.redirect('/login')
+})
+
+router.get('/login', (req, res) => {
+    res.send('silahkan Login terlebih dahulu')
+})
+
+module.exports = router
+```
+
+Lakukan pengujian menggunakan insomnia dan gunakan form untuk mengentri data, perhatikan gambar.
+![Create User Insomnia](https://raw.githubusercontent.com/AsrulLove/img-db/master/create.png)
+
+Hasilnya akan tersimpan kedalam database.
+![Database user](https://raw.githubusercontent.com/AsrulLove/img-db/master/db-create.png)
+
+### Read
+Read adalah membaca atau menarik data dari database. Langsung saja ubah `function readUser` menjadi seperti berikut.
+
+```js
+function readUser(req, res) {
+    model.User.findAll()
+    .then( function(result) {
+        res.json(result)
+    })
+    .catch( function(error) {
+        res.json({error: error})
+    })
+}
+```
+
+Sebelumnya saya telah menambahkan data **Anis Fikriyyah**. Sekarang silahkan kita uji menggunakan insomnia.
+
+![read](https://raw.githubusercontent.com/AsrulLove/img-db/master/read.png)
+
+### Update
+Update adalah mengubah data yang sudah tersimpan dengan data yang baru.
+
+Ubah `function updateUser` menjadi seperti berikut.
+```js
+function updateUser(req, res) {
+    model.User.update({
+        name: req.body.name,
+        label: req.body.label,
+        picture: req.body.picture,
+        email: req.body.email,
+        phone: req.body.phone,
+        website: req.body.website,
+        summary: req.body.summary
+    }, {
+        where: {
+          id: req.params.id
+        }
+    })
+    .then( function(result) {
+        res.json(result)
+    })
+    .catch( function(error) {
+        res.json({error: error})
+    })
+}
+```
+
+Terlihat bahwa sebelumnya **Full Stack Dev** telah berubah menjadi **React Developer**, lihat gambar berikut.
+
+![update](https://raw.githubusercontent.com/AsrulLove/img-db/master/update.png)
+
+### Delete
+Untuk menghapus data maka ubah `function deleteUser` sehingga menjadi berikut.
+
+```js
+function deleteUser(req, res) {
+    model.User.destroy({
+        where: {
+          id: req.params.id
+        }
+    })
+    .then( function(result) {
+        res.json(result)
+    })
+    .catch( function(error) {
+        res.json({error: error})
+    })
+}
+```
+
+Hasilnya akan seperti berikut.
+
+![Delete](https://raw.githubusercontent.com/AsrulLove/img-db/master/delete.png)
+
+Kode lengkap materi diatas bisa download di [sini](https://github.com/asruldev/expres-30-js/tree/master) -->
+
+<!--
 
 ## Hari 13
 Update: Jumat, 17 Januari 2020
