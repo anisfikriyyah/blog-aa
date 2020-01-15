@@ -1890,7 +1890,7 @@ Maka akan menghasilkan seperti berikut.
 
 Sekarang model dan tabel sudah selesai, kita siap untuk melakukan CRUD terhadap data tabel yang telah kita miliki.
 
-<!-- ## Hari 12
+## Hari 12
 Update: Kamis, 16 Januari 2020
 
 Karena kita sudah memiliki model dan tabel user. Sekarang saatnya kita melakukan operasi CRUD, Create, Read, Update dan Delete.
@@ -2103,14 +2103,458 @@ Hasilnya akan seperti berikut.
 
 ![Delete](https://raw.githubusercontent.com/AsrulLove/img-db/master/delete.png)
 
-Kode lengkap materi diatas bisa download di [sini](https://github.com/asruldev/expres-30-js/tree/master) -->
-
-<!--
+Kode lengkap materi diatas bisa download di [sini](https://github.com/asruldev/expres-30-js/tree/master)
 
 ## Hari 13
 Update: Jumat, 17 Januari 2020
-AUTHENTICATE
+
+Senangnya kita telah menyelesaikan CRUD pada database, sekarang yang kita inginkan adalah data yang aman, yang berhak yang boleh mengubah atau menghapus data tersebut.
+
+### Authentication
+Pada tabel `user` kita telah memiliki beberapa kolom yaitu id, name, label, picture, email, phone, website, summary tetapi untuk melakukan login kita butuh setidaknya email dan password, karena itu kita akan menambahkan kolom `password`.
+
+#### Tambah Kolom Sequelize
+Untuk menambahkan kolom pada sequelize, lakukan peintah berikut.
+
+```bash
+sequelize migration:create --name add_column_password
+```
+
+Sehingga menghasilkan file migrasi, seperti gambar berikut.
+
+![Migrasi Kolom](https://raw.githubusercontent.com/AsrulLove/img-db/master/migrasi-column.png)
+
+Ubah isi file migrasi tersebut sehingga menjadi seperti berikut.
+
+```js
+'use strict';
+
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.addColumn(
+      'Users',
+      'password',
+      Sequelize.STRING
+    );
+  },
+
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.removeColumn(
+      'Users',
+      'password'
+    );
+  }
+};
+```
+
+Kemudian migrasi tersebut kita terapkan ke database dengan perintah berikut.
+
+```bash
+sequelize db:migrate
+```
+
+![Setelah Add Column](https://raw.githubusercontent.com/AsrulLove/img-db/master/tambah-kolom.png)
+
+Jika kolom telah kita tambahkan, jangan lupa ubah model agar sesuai dengan tabel. Ubah file `user.js` sehingga menjadi seperti berikut.
+
+```js
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    name: DataTypes.STRING,
+    label: DataTypes.STRING,
+    picture: DataTypes.STRING,
+    email: DataTypes.STRING,
+    phone: DataTypes.STRING,
+    website: DataTypes.STRING,
+    summary: DataTypes.STRING,
+    password: DataTypes.STRING
+  }, {});
+  User.associate = function(models) {
+    // associations can be defined here
+  };
+  return User;
+};
+```
+
+### Register User
+Proses register merupakan proses untuk mendaftarkan identitas yang memiliki kunci untuk masuk kembali. Data yang bersifat sensitif harus kita lakukan encripsi. Pada kasus ini kita butuh library `bcryptjs` yang berfungsi untuk mengencripsi data. Intall bcryptjs dengan cara.
+
+```bash
+npm i bcryptjs
+```
+
+Pastikan pada file `package.json`, bcryptjs telah tersedia.
+
+Ubah `function createUser` pada file `user.controller.js` dan tambahkan bcryptjs.
+
+```js
+const model = require('../models')
+const bcrypt = require('bcryptjs')
+
+function createUser(req, res) {
+    let salt = bcrypt.genSaltSync(10)
+    let hash = bcrypt.hashSync(req.body.password, salt)
+
+    model.User.create({
+        name: req.body.name,
+        label: req.body.label,
+        picture: req.body.picture,
+        email: req.body.email,
+        phone: req.body.phone,
+        website: req.body.website,
+        summary: req.body.summary,
+        password: hash,
+    })
+    .then( function(result) {
+        res.json(result)
+    })
+    .catch( function(error) {
+        res.json({error: error})
+    })
+}
+```
+
+Perhatikan hasil register pada insomnia.
+
+![Register](https://raw.githubusercontent.com/AsrulLove/img-db/master/bycript.png)
+
+### Token User
+Pada sebuah aplikasi setelah seseorang login maka dibutuhkan token sebagai credential terpercaya untuk mengelola data, misal update atau mungkin hapus.
+
+Kalau dicontohkan ke kehidupan nyata email dan password adalah tiket untuk naik pesawat yang ditukarkan saat check in hingga mendapatkan boarding pass. Boarding pass inilah yang kita gunakan untuk masuk ke pesawat. Sama halnya dengan token, token didapatkan setelah login dilakukan, sehingga token dikirim bersamaan dengan akses pada server lebih dalam.
+
+Untuk membuat token kita menggunakan library `jsonwebtoken`, install dengan cara berikut.
+
+```bash
+npm i jsonwebtoken
+```
+
+Tambahkan `function loginUser` pada file `user.controller.js`, yang isinya seperti berikut.
+
+```js
+const model = require('../models')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
+function loginUser(req, res) {
+    const email = req.body.email
+    const password = req.body.password
+
+    model.User.findOne({
+        where: {
+          email: email
+        }
+    })
+    .then( function(result) {
+        let passwordHash = result.password
+        let checkPassword = bcrypt.compareSync(password, passwordHash);
+        
+        if(checkPassword) {
+            res.json({
+                message: "Berhasil Login",
+                token: jwt.sign({ id: result.id }, 'asrul-dev')
+            })
+        } else {
+            res.json({
+                message: "Gagal Login",
+            })
+        }
+    })
+    .catch( function(error) {
+        res.json({error: error})
+    })
+}
+```
+
+Jangan lupa tambahkan route pada file `user.route.js`, sehingga menjadi seperti berikut.
+
+```js
+const router = require('express').Router()
+const userController = require('../controller/user.controller.js')
+
+router.post('/login', userController.loginUser)
+router.post('/', userController.createUser)
+router.get('/', userController.readUser)
+router.put('/:id', userController.updateUser)
+router.delete('/:id', userController.deleteUser)
+
+module.exports = router
+```
+
+Tes menggunakan insomia.
+![Hasil Token](https://raw.githubusercontent.com/AsrulLove/img-db/master/dapat-token.png)
+
+Akhirnya berhasil juga, tapi tidak sampai disitu kita harus melakukan autorize, yaitu memberi hak akses terhadap aktifitas data. Seperti update dan delete pada kasus ini hanya boleh dilakukan orang yang memiliki akun tersebut.
+
+### Authorize
+Penggunaan authorize kita harus membuat middleware, middleware adalah perantara route dan controller, sehingga ketika melewati route menuju controller akan dilakukan pemeriksaan, apakah memiliki autorize atau tidak.
+
+Buat file baru dengan nama `auth.js` dalam folder `middlewares`, yang isinya berikut.
+
+```js
+const jwt = require('jsonwebtoken')
+const model = require('../models')
+
+module.exports = (req, res, next) => {
+    let token = req.headers.token
+    if(token) {
+        let verify = jwt.verify(token, 'asrul-dev')
+
+        model.User.findOne({
+            where: {
+                id: verify.id
+            }
+        })
+        .then( function(result) {
+            if(result) {
+                req.decoded = verify
+                next()
+            } else {
+                res.status(401).json({
+                    "message": "Kamu tak punya akses"
+                })
+            }
+        })
+        .catch( function(error) {
+            res.json({error: error})
+        })
+    } else {
+        res.status(401).json({
+            "message": "Silahkan Login Dahulu"
+        })
+    }
+}
+```
+
+Kemudian ubah route `user.router.js` menjadi seperti berikut.
+
+```js
+const router = require('express').Router()
+const userController = require('../controller/user.controller.js')
+const auth = require('../middlewares/auth.js')
+
+router.post('/login', userController.loginUser)
+router.post('/', userController.createUser)
+router.get('/', userController.readUser)
+router.put('/:id', auth, userController.updateUser)
+router.delete('/:id', auth, userController.deleteUser)
+
+module.exports = router
+```
+
+Pada saat update dan delete, jika yang mengakses bukan yang login maka data dilarang diubah atau dihapus. Untuk melakukan itu ubah `function updateUser` dan `function deleteUser` menjadi seperti berikut. 
+
+```js
+function updateUser(req, res) {
+    let decodedId =  req.decoded.id
+
+    if(decodedId !== req.params.id) {
+        res.json({
+            message: "Ini bukan data Anda"
+        })
+    }
+
+    model.User.update({
+        name: req.body.name,
+        label: req.body.label,
+        picture: req.body.picture,
+        email: req.body.email,
+        phone: req.body.phone,
+        website: req.body.website,
+        summary: req.body.summary
+    }, {
+        where: {
+          id: req.params.id
+        }
+    })
+    .then( function(result) {
+        res.json(result)
+    })
+    .catch( function(error) {
+        res.json({error: error})
+    })
+}
+
+function deleteUser(req, res) {
+    let decodedId =  req.decoded.id
+
+    if(decodedId !== req.params.id) {
+        res.json({
+            message: "Ini bukan data Anda"
+        })
+    }
+    
+    model.User.destroy({
+        where: {
+          id: req.params.id
+        }
+    })
+    .then( function(result) {
+        res.json(result)
+    })
+    .catch( function(error) {
+        res.json({error: error})
+    })
+}
+```
+
+Kita uji pada insomnia dengan skenario, token adalah milik user dengan id 3, tetapi yang akan dihapus adalah user id 4.
+![Gagal Hapus](https://raw.githubusercontent.com/AsrulLove/img-db/master/gagal-hapus.png)
+
+Untuk kode lengkap silahkan lihat [disini](https://github.com/asruldev/expres-30-js/tree/1-auth)
+
+
+<!-- ## Hari 14
+Update: Sabtu, 18 Januari 2020
+
+Latihan lagi yah :)
+
+```js
+const users = [
+  {
+    "user": "king David Martins",
+    "age": 21,
+    "active": true
+  },
+  {
+    "user": "ashley",
+    "age": 23,
+    "active": false
+  },
+  {
+    "user": "alex",
+    "age": 43,
+    "active": true
+  },
+  {
+    "user": "john",
+    "age": 32,
+    "active": true
+  },
+  {
+    "user": "chris",
+    "age": 21,
+    "active": false
+  },
+  {
+    "user": "tomlin",
+    "age": 32,
+    "active": false
+  },
+  {
+    "user": "vernon",
+    "age": 34,
+    "active": true
+  },
+  {
+    "user": "Boni",
+    "age": 43,
+    "active": true
+  },
+  {
+    "user": "mattt",
+    "age": 32,
+    "active": true
+  },
+  {
+    "user": "bridget",
+    "age": 23,
+    "active": false
+  },
+  {
+    "user": "kyle",
+    "age": 65,
+    "active": true
+  },
+  {
+    "user": "julia",
+    "age": 22,
+    "active": true
+  },
+  {
+    "user": "jake",
+    "age": 23,
+    "active": false
+  }
+]
+```
+
+1. Jika active adalah sedang online, carilah siapa saja user yang sedang online!
+
+2. Siapa saja user yang berusia dibawah 25 tahun?
+
+3. Berdasarkan data diatas, buatlah CRUD untuk menyimpan user, age, dan active menggunakan express dan mysql!
+
+4. Buat fitur search yang dapat mencari usia, nama, dan sedang online! 
+
+### Deploy Server
+-->
 
 ## Hari 14
 Update: Sabtu, 18 Januari 2020
-CHALLANGE -->
+Latihan dan Deploy
+
+## Hari 15
+Update: Minggu, 19 Januari 2020
+Pengenalan ES6
+
+## Hari 16
+Update: Senin, 20 Januari 2020
+React Js dasar
+
+## Hari 17
+Update: Selasa, 21 Januari 2020
+Routing
+
+## Hari 18
+Update: Rabu, 22 Januari 2020
+Redux
+
+## Hari 19
+Update: Kamis, 23 Januari 2020
+Hooks
+
+## Hari 20
+Update: Jumat, 24 Januari 2020
+CRUD API
+
+## Hari 21
+Update: Sabtu, 25 Januari 2020
+Latihan dan Deploy
+
+## Hari 22
+Update: Minggu, 26 Januari 2020
+Persiapan Mobile
+
+## Hari 23
+Update: Senin, 27 Januari 2020
+Install dan Pengenalan React Native
+
+## Hari 24
+Update: Selasa, 28 Januari 2020
+Membuat Komponen
+
+## Hari 25
+Update: Rabu, 29 Januari 2020
+Navigation
+
+## Hari 26
+Update: Kamis, 30 Januari 2020
+Auth
+
+## Hari 27
+Update: Jumat, 31 Januari 2020
+CRUD
+
+## Hari 28
+Update: Sabtu, 1 Fabruari 2020
+Latihan
+
+## Hari 29
+Update: Minggu, 2 Februari 2020
+Publish Play Store
+
+## Hari 30
+Update: Senin, 3 Februari 2020
+Hari Misteri
