@@ -7,6 +7,6 @@
 
 module.exports = {
   someSidebar: {
-    Series: ['30daysweb'],
+    Series: ['30daysweb', '30harijs'],
   },
 };

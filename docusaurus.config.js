@@ -28,8 +28,7 @@ module.exports = {
         src: 'img/logo.svg',
       },
       links: [
-        {to: 'docs/30daysweb', label: '30 Hari Js', position: 'left'},
-        {to: 'docs/android', label: 'Android', position: 'right'},
+        {to: 'docs/30daysweb', label: '30 Hari Js', position: 'left'},        {to: 'docs/android', label: 'Android', position: 'right'},
         {to: 'blog', label: 'Blog', position: 'right'},
         // Please keep GitHub link to the right for consistency.
         {
