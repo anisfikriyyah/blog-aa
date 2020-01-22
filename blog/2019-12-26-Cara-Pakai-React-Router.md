@@ -35,8 +35,8 @@ import {
 } from 'react-router-dom'
 
 import Home from './src/Page/Home'
-import Home from './src/Page/About'
-import Home from './src/Page/404'
+import About from './src/Page/About'
+import NotFound from './src/Page/404'
 
 class App extends Component {
   render() {
@@ -51,8 +51,8 @@ class App extends Component {
           <main>
             <Switch>
               <Route path='/' exact component={Home} />
-              <Route path='/about' exact component={Home} />          
-              <Route component={404} />  
+              <Route path='/about' exact component={About} />          
+              <Route component={NotFound} />  
             </Switch>
           </main>
         </React.Fragment>

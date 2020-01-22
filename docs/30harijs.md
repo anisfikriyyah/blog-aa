@@ -855,8 +855,9 @@ console.log(hi())
 // hasil: Hi, apa kabar?
 ```
 
-### Dasar-dasar DOM
-DOM merupakan singkatan dari Data Object Model yang digunakan untuk memanipulasi apa saja yang ada dalam structur HTML, memanipulasi yang dimaksud berupa menambah, mengubah, atau menghapus elemen dalam HTML.
+### Dasar-dasar DOM (Sedang Review ulang...)
+Mohon maaf materi ini ditutup sementara untuk direview ulang agar penjelasan lebih sedaerhana dan mudah dimengerti, :)
+<!-- DOM merupakan singkatan dari Data Object Model yang digunakan untuk memanipulasi apa saja yang ada dalam structur HTML, memanipulasi yang dimaksud berupa menambah, mengubah, atau menghapus elemen dalam HTML.
 
 DOM akan dimuat oleh browser ketika semua file html sudah selesai dijalankan.
 
@@ -1046,7 +1047,7 @@ Perhatikan dan cobakan contoh berikut.
         alert('Kamu menyentuh gambar orang ganteng itu')
     })
 </script>
-```
+``` -->
 
 ## Hari 16
 Update: Senin, 20 Januari 2020
@@ -1246,19 +1247,564 @@ export default Hello
 
 ## Hari 17
 Update: Selasa, 21 Januari 2020
-Routing
+
+### React Router DOM
+Pada pembahasan router kita akan menggunakan library `react-router-dom`, langsung saja install pada proyek dengan perintah berikut.
+
+```bash
+npm i react-router-dom
+```
+
+Setelah diinstall kita ubah file `App.js` agar mengeload file yang akan kita buat dengan nama `RoterApp.js`, dan tambahkan file `pages/Home.js` untuk halaman home dan `pages/About.js` untuk halaman about, sehingga kodenya seperti berikut.
+
+File `App.js`
+
+```jsx
+import React from 'react'
+import './App.css'
+
+import RouterApp from './RouterApp'
+
+function App() {
+  return (
+    <RouterApp />
+  )
+}
+
+export default App;
+```
+
+File `RouterApp.js`
+
+```jsx
+import React, { Component, Fragment } from 'react'
+import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
+
+import Home from './pages/Home'
+import About from './pages/About'
+
+class RouterApp extends Component {
+  render() {
+    return (
+      <BrowserRouter>
+        <Fragment>
+          <nav>
+            <li> <Link to='/'> Home </Link> </li>
+            <li> <Link to='/about'> About </Link> </li>
+          </nav>
+          
+          <main>
+            <Switch>
+              <Route path='/' exact component={Home} />
+              <Route path='/about' exact component={About} />          
+            </Switch>
+          </main>
+        </Fragment>
+      </BrowserRouter>
+    )
+  }
+}
+
+export default RouterApp
+```
+
+File `page/Home.js`
+```jsx
+import React from 'react'
+
+const Home = (props) => {
+    return (
+        <div>
+            <h1>Ini Halaman Home</h1>
+        </div>
+    )
+}
+
+export default Home
+```
+
+File `page/About.js`
+```jsx
+import React from 'react'
+
+const About = (props) => {
+    return (
+        <div>
+            <h1>Ini Halaman About</h1>
+        </div>
+    )
+}
+
+export default About
+```
+
+### Uji Router
+
+Sehingga hasilnya akan seperti berikut.
+![React Router](https://raw.githubusercontent.com/AsrulLove/img-db/master/react-js/react-router-about.png)
+
+Dan tambahkan css pada App.css, seperti berikut.
+```css
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  min-height: 100vh;
+}
+
+body nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: green;
+  width: 100%;
+  height: 40px;
+}
+
+body nav li {
+  margin-right: 2rem;
+}
+
+body nav li a {
+  color: white;
+}
+
+body nav li a:hover {
+  color: yellow;
+}
+
+body main {
+  padding: 3rem;
+  color: gray;
+}
+```
+
+Hasilnya akan seperti berikut.
+![React Router Dom](https://raw.githubusercontent.com/AsrulLove/img-db/master/react-js/router-video.gif)
 
 ## Hari 18
 Update: Rabu, 22 Januari 2020
-Redux
+
+Redux adalah library yang digunakan sebagai state management global. Beberapa orang bilang redux itu ibarat database di frontend, tapi ini hanya bersifat sementara tidak benar-benar tersimpan. Libih jelasnya baca di [sini](https://redux.js.org).
+
+![Analogy Redux](https://camo.githubusercontent.com/ab7d58d6490c527f07c7a99097dc8a36588cfad9/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f313630302f312a3837644a35454233796444375f4162684b6234554f512e706e67)
+
+### Persiapan React Redux
+Beberapa yang perlu diinstall pada saat menggunakan react redux yaitu berikut.
+
+```bash
+npm i redux
+```
+
+```bash
+npm i react-redux
+```
+
+```bash
+npm i redux-thunk
+```
+
+```bash
+npm i axios
+```
+
+### Reducer
+Reducer adalah function yang digunakan untuk mengubah data state sesuai dengan action yang diterima yang akan dicek menggunakan switch case atau if else (kebanyakan menggunakan switch case).
+
+Buatlah file `user.reducer.js` dalam folder `reducers`, yang isinya seperti berikut.
+
+File `user.reducer.js`
+```javascript
+const initialState = {
+    users: [],
+    isError: false,
+    isLoading: false
+}
+  
+export default (state = initialState, action) => {
+    switch (action.type) {
+        case 'GET_USER_REQUEST':
+            return {
+                ...state,
+                isError: false,
+                isLoading: true,
+            }
+        case 'GET_USER_DONE':
+            return {
+                ...state,
+                users: action.payload,                
+                isError: false,
+                isLoading: false
+            }
+        case 'GET_USER_ERROR':
+            return {
+                ...state,
+                isError: true,
+                isLoading: false
+            }
+        default:
+            return state
+    }
+}
+```
+
+### Action
+Action berfungsi sebagai control apasaja yang akan dilakukan oleh reducer untuk mengubah data. Buatlah file `user.action.js` dalam folder `actions`, yang isinya seperti berikut.
+
+File `user.action.js`
+
+```js
+import axios from 'axios'
+
+const baseUrl = `https://warm-refuge-26108.herokuapp.com`
+
+export const getUsers = () => {
+    return async dispatch => {
+        dispatch({
+            type: 'GET_USER_REQUEST'
+        })
+        try {
+            const result = await axios.get(baseUrl + `/users`)
+            dispatch({
+                type: 'GET_USER_DONE',
+                payload: result.data
+            })
+        } catch (error) {
+            dispatch({
+                type: 'GET_USER_ERROR'
+            })
+        }
+    }
+}
+```
+
+### Store
+Store adalah kumpulan reducer yang dijadikan sebagai induk data untuk dibagikan kesemua component dengan provider. Buatlah file `store.js` didalam folder `helpers` yang isinya berikut.
+
+```js
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+
+import Users from '../reducers/user.reducer'
+  
+const combine = combineReducers({
+    users: Users,
+})
+  
+const Store = createStore( combine, applyMiddleware(thunk) )
+export default Store
+```
+
+### Provider
+Provider adalah function dari `react-redux` sebagai penyedia store yang bisa diakses semua component. Ubah file `App.js` menjadi seperti berikut.
+
+```javascript
+import React from 'react'
+import { Provider } from 'react-redux'
+import './App.css'
+
+import Store from './helpers/store'
+import RouterApp from './RouterApp'
+
+function App() {
+  return (
+    <Provider store= {Store}>
+      <RouterApp />
+    </Provider>
+  )
+}
+
+export default App
+```
 
 ## Hari 19
 Update: Kamis, 23 Januari 2020
-Hooks
+
+Pada saat menulis ini saya baru sadar, kenapa tidak materi **Hooks** terlebih dahulu saya tulis kemudian redux, tapi yasudahlah, anggap saja ini seperti movie dengan alur maju mundur.
+
+### React Hooks
+Sejak react versi 16.8, hooks diperkenalkan sehingga component dengan function memiliki akses ke state dan lifecycle secara sederhananya.
+
+#### useState
+`useState` adalah cara menggunakan state pada react hooks, cara penggunaannya sangat simple dengan mendeklarasikan array untuk menyimpan data dan untuk pengubahnya.
+
+
+```js
+const [hitung, updateHitung] = useState(0)
+```
+
+Penggunaannya seperti berikut.
+
+```js
+import React, { useState } from 'react'
+
+const Perhitungan = () => {
+  const [hitung, updateHitung] = useState(0)
+
+  return (
+    <div>
+      { hitung }
+
+      <button onClick={() => updateHitung(hitung + 1)}> Tambah 1</button>
+    </div>
+  )
+}
+```
+
+### useRef
+Hooks useRef digunakan untuk membuat pointer atau referensi terhadap elemen DOM.
+
+Cara penggunaannya.
+
+```jsx
+import React, { useState, useRef } from 'react'
+
+const Perhitungan = () => {
+  const inputRef = useRef(null);
+
+  return (
+    <div>
+      <label>Input:</label>
+      <input type="text" ref={inputRef} placeholder="Asrul Dev" />
+      <button
+        onClick={() => {
+          const element = inputRef.current;
+          element.focus()
+        }}
+      >
+        Fokuskan!
+      </button>
+    </div>
+  )
+}
+```
+
+### useEffect / lifeCycle Hooks
+useEffect digunakan sebagai pengganti lifeCycle pada react versi class component.
+
+Sebagai **componentDidMount**, jika parameter kedua adalah array kosong.
+
+```jsx
+useEffect( () => {
+  console.log("Mounted Yah:)")
+}, [])
+```
+
+Sebagai **componentWillMount** adalah apasaja yang direturn pada useEffect.
+```jsx
+useEffect( () => {
+  console.log("Mounted Yah:)")
+  
+  return () => {
+    console.log("Will UnMount Yah :(")
+  }
+}, [])
+
+```
+
+useEffect dijalankan jika props berubah.
+```jsx
+useEffect( () => {
+  console.log("Mounted Yah:)")
+}, [props.nilaiAwal])
+```
+
+Jalankan jika state berubah.
+```jsx
+useEffect( () => {
+  console.log("Hitung terapdet");
+}, [hitung])
+```
+
+### Konsum Redux
+Sebelumnya kita telah membahas redux. Sempat terhenti karena ada materi penting yang harus dipahami sebelum konsum redux, yaitu Hooks pada react. Sekarang setelah kita bahas tentang Hooks, maka materi ini barulah bisa lanjut kembali.
+
+Pada file `pages/Home.js` konsums redux dengan mengubah kode menjadi seperti berikut.
+
+```jsx
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUsers } from '../actions/user.action'
+
+const Home = (props) => {
+    const dispatch = useDispatch()
+    const usersData = useSelector(state => state.users)
+
+    useEffect( () => {
+        dispatch( getUsers() )
+    }, [])
+
+    return (
+        <div className="page">
+            <h1 className="page-title">Member 30 Hari Js</h1>
+
+            {
+                usersData.isLoading && (
+                    <h1>Loading ....</h1>
+                )
+            }
+
+            {
+                usersData.isError && (
+                    <h1>Error Data ....</h1>
+                )
+            }
+            <div className="users">
+            {
+                !usersData.isError && 
+                usersData.data.length > 0 && 
+                usersData.data.map( (user, index) => (
+                    <div className="user" key={index}>
+                        <div className="user-img-container">
+                            <img src={user.picture} alt={user.picture} />
+                        </div>
+                        <div className="user-detail">
+                            <h3> {user.name} </h3>
+                        </div>
+                    </div>
+                ))
+            }
+            </div>
+        </div>
+    )
+}
+
+export default Home
+```
+> Penggunaan map baca [disini](https://asrul.dev/blog/memahami-map-filter-dan-reduce)
+
+Kemudia poles sedikt dengan mengubah css agar tampilan lebih menarik, sehingga file `App.css` menjadi seperti berikut.
+
+```css
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  min-height: 100vh;
+}
+
+body nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: green;
+  width: 100%;
+  height: 40px;
+}
+
+body nav li {
+  margin-right: 2rem;
+}
+
+body nav li a {
+  color: white;
+}
+
+body nav li a:hover {
+  color: yellow;
+}
+
+body main {
+  padding: 3rem;
+  color: gray;
+}
+
+.page {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.page .page-title {
+  color: black;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.page .users {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+.page .users .user {
+  width: 25%;
+  border: 1px green solid;
+  margin-right: 1rem;
+}
+
+.page .users .user:nth-child(4n) {
+  margin-right: 0;
+}
+
+.page .users .user .user-img-container img {
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.page .users .user .user-detail h3 {
+  text-align: center;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+}
+```
+
+Hasil nya akan menjadi seperti berikut.
+![Hasil Aplikasi](https://raw.githubusercontent.com/AsrulLove/img-db/master/hasil1.gif)
 
 ## Hari 20
 Update: Jumat, 24 Januari 2020
-CRUD API
+Fetch API
 
 ## Hari 21
 Update: Sabtu, 25 Januari 2020
