@@ -1437,7 +1437,7 @@ Buatlah file `user.reducer.js` dalam folder `reducers`, yang isinya seperti beri
 File `user.reducer.js`
 ```javascript
 const initialState = {
-    users: [],
+    data: [],
     isError: false,
     isLoading: false
 }
@@ -1453,7 +1453,7 @@ export default (state = initialState, action) => {
         case 'GET_USER_DONE':
             return {
                 ...state,
-                users: action.payload,                
+                data: action.payload,                
                 isError: false,
                 isLoading: false
             }
@@ -1801,47 +1801,3 @@ body main {
 
 Hasil nya akan menjadi seperti berikut.
 ![Hasil Aplikasi](https://raw.githubusercontent.com/AsrulLove/img-db/master/hasil1.gif)
-
-## Hari 20
-Update: Jumat, 24 Januari 2020
-Fetch API
-
-## Hari 21
-Update: Sabtu, 25 Januari 2020
-Latihan dan Deploy
-
-## Hari 22
-Update: Minggu, 26 Januari 2020
-Persiapan Mobile
-
-## Hari 23
-Update: Senin, 27 Januari 2020
-Install dan Pengenalan React Native
-
-## Hari 24
-Update: Selasa, 28 Januari 2020
-Membuat Komponen
-
-## Hari 25
-Update: Rabu, 29 Januari 2020
-Navigation
-
-## Hari 26
-Update: Kamis, 30 Januari 2020
-Auth
-
-## Hari 27
-Update: Jumat, 31 Januari 2020
-CRUD
-
-## Hari 28
-Update: Sabtu, 1 Fabruari 2020
-Latihan
-
-## Hari 29
-Update: Minggu, 2 Februari 2020
-Publish Play Store
-
-## Hari 30
-Update: Senin, 3 Februari 2020
-Hari Misteri

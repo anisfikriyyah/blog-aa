@@ -6,7 +6,10 @@
  */
 
 module.exports = {
-  someSidebar: {
-    Series: ['30daysweb', '30harijs'],
+  firstSidebar: {
+    'Series Js': ['30daysweb', '30harijs', '30harijavascript'],
+  },
+  secondSidebar: {
+    'Series PHP': ['paham-php'],
   },
 };
