@@ -18,12 +18,12 @@ const features = [
     ),
   },
   {
-    title: <>Kotlin</>,
-    link: '/docs/master-kotlin',
-    imageUrl: 'https://andrewshitov.com/wp-content/uploads/2019/11/Kotlin.png',
+    title: <>Vue 14 Hari</>,
+    link: '/docs/vue-14-hari',
+    imageUrl: 'https://raw.githubusercontent.com/AsrulLove/img-db/master/vue-logo.png',
     description: (
       <>
-        Mempelajari dasar-dasar kotlin hingga membangun sebuah aplikasi Android
+        Membahas Framework Vue Js selama 14 hari
       </>
     ),
   },

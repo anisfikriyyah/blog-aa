@@ -1220,27 +1220,3 @@ export default About
 Hasilnya akan terlihat seperti berikut.
 
 ![React Router Native](https://raw.githubusercontent.com/AsrulLove/img-db/master/router.gif)
-
-## Hari 25
-Update: Rabu, 29 Januari 2020
-Icon and Redux
-
-## Hari 26
-Update: Kamis, 30 Januari 2020
-Auth
-
-## Hari 27
-Update: Jumat, 31 Januari 2020
-CRUD
-
-## Hari 28
-Update: Sabtu, 1 Fabruari 2020
-Latihan
-
-## Hari 29
-Update: Minggu, 2 Februari 2020
-Publish Play Store
-
-## Hari 30
-Update: Senin, 3 Februari 2020
-Hari Misteri

@@ -7,9 +7,9 @@
 
 module.exports = {
   firstSidebar: {
-    'Series Js': ['30daysweb', '30harijs', '30harijavascript'],
+    'Series Js': ['30daysweb', '30harijs', '30harijavascript', '30hariweb'],
   },
   secondSidebar: {
-    'Series PHP': ['paham-php'],
+    'Peta Harta Karun': ['vue-14-hari', 'vue-14-hari-2'],
   },
 };

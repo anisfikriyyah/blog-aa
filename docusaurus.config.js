@@ -29,7 +29,7 @@ module.exports = {
       },
       links: [
         {to: 'docs/30daysweb', label: '30 Hari Js', position: 'left'},
-        {to: 'docs/paham-php', label: 'Paham PHP', position: 'left'},
+        {to: 'docs/vue-14-hari', label: 'Vue 14 Hari', position: 'left'},
         {to: 'blog', label: 'Blog', position: 'right'},
         {
           href: 'https://github.com/asruldev',
@@ -37,7 +37,7 @@ module.exports = {
           position: 'right',
         },
       ],
-      hideOnScroll: true,
+      hideOnScroll: false,
     },
     footer: {
       style: 'light',
@@ -50,8 +50,8 @@ module.exports = {
               to: 'docs/30daysweb',
             },
             {
-              label: 'Android',
-              to: 'docs/android',
+              label: 'Vue 14 Hari',
+              to: 'docs/vue-14-hari',
             },
           ],
         },
@@ -101,8 +101,8 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl:
-            'https://github.com/asruldev/30djs',
+          // editUrl:
+            // 'https://github.com/asruldev/30djs',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
