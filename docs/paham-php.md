@@ -80,4 +80,99 @@ php -S localhost:9999
 Jika diamati lebih, ternyata pada php dapat menjalankan html secara langsung.
 
 ### Hari 2
-coming soon
+Update: Selasa, 24 Maret 2020
+
+Maaf banget, meteri ini sempat terlantar karena banyaknya aktivitas yang harus saya kerjakan diluar... Sekali lagi mohon maaf.
+
+#### Variable dan Tipe Data
+
+Cara menyimpan nilai pada sebuah bahasa pemrograman adalah dengan sebuah variable. Pada php variable ditandai awalan tanda dollar `$`.
+
+Contoh
+
+```php
+<?php
+$nama = "Asrul Harahap";
+?>
+```
+Variable memiliki tanda = sebagai pemisah nama variable disebelah kiri = dan nilai variable disebelah kanan =.
+
+#### Tipe Data
+
+PHP memiliki beberapa tipe data yaitu:
+
+1. Integers berupa angka numerik tanpa desimal
+2. Doubles berupa angka numerik yang memiliki desimal
+3. Boolean berupa nilai `true` atau `false`
+4. NULL merupakan tipe data yang cukup special hanya bernilai NULL
+5. String merupakan karakter atau kumpulan karakter.
+6. Array berupa kumpulan dari beberapa data dan memiliki index yang dimulai dari nol (0)
+7. Objects merupakan instance dari class yang telah didefenisikan yang menjadi sekumpulan fungsi-fungsi.
+8. Resource merupakan variable special untuk mengakses resource luar dari PHP.
+
+### Lingkup Variable
+Ada beberapa lingkup variable dalam PHP.
+
+1. Local
+Variable yang dideklarasikan dalam sebuah function dianggap variable lokal. Itu hanya dapat dirujuk atau digunakan dalam function itu sendiri.
+
+```php
+<?php
+$uang = 4000;
+
+function uangLagi() {
+    $uang = 2500;
+    echo "Uang dalam function " . $uang . "<br />";
+}
+uangLagi();
+echo "Uang luar function " . $uang;
+?>
+```
+
+Hasilnya
+```
+Uang dalam function 2500
+Uang luar function 4000
+```
+
+2. Param Function
+Variable hanya berupa param pada function. Perhatikan contoh berikut.
+
+```php
+<?php
+function kalikanSepuluh($nilai) {
+    $nilai = $nilai * 10;
+    return $nilai;
+}
+
+echo kalikanSepuluh(20);
+?>
+```
+
+hasilnya
+```
+200
+```
+
+3. Lingkup global
+Variable yang diawali keyword `GLOBAL` akan dapat diakses dari mana saja.
+
+```php
+<?php
+   $counter = 15;
+   
+   function addit() {
+      GLOBAL $counter;
+      $counter++;
+      
+      echo "counter jadi " . $counter;
+   }
+   
+   addit();
+?>
+```
+
+Hasilnya
+```
+counter jadi 16
+```
